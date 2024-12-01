@@ -1,61 +1,124 @@
-# Random Doc Tools
+# File Converter Service
 
-A versatile document processing tool that provides various functionalities:
+A robust microservice for document and image processing, offering various conversion and manipulation capabilities. Built with Flask and containerized with Docker for easy deployment.
 
-## Features
-1. PDF to PNG Conversion
-2. PNG to PDF Conversion
-3. Image Background Removal
-4. PDF Combination (Merge multiple PDFs)
+## 🚀 Features
 
-## Setup
-1. Clone the repository
+- **PDF Operations**
+  - PDF to PNG conversion
+  - PNG to PDF conversion
+  - PDF merging/splitting
+  - PDF watermarking
+  
+- **Image Processing**
+  - Format conversion
+  - Background removal
+  - Image compression
+  - Basic transformations
+
+## 🛠️ Tech Stack
+
+- Python 3.x
+- Flask
+- Docker
+- PyPDF2
+- pdf2image
+- Pillow (PIL)
+- rembg
+- Werkzeug
+
+## 🔧 Prerequisites
+
+- Docker (recommended)
+- Python 3.x (for local development)
+- poppler-utils (for PDF processing)
+
+## 🚀 Quick Start
+
+### Using Docker (Recommended)
+
+1. Build the Docker image:
+```bash
+docker build -t file-converter-service .
+```
+
+2. Run the container:
+```bash
+docker run -p 5001:5001 file-converter-service
+```
+
+### Local Development
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/0537ch/randomdoctools.git
 cd randomdoctools
 ```
 
-2. Install dependencies
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the application
+3. Run the application:
 ```bash
 python app.py
 ```
 
-4. Access the web interface at `http://localhost:5001`
+Access the web interface at `http://localhost:5001`
 
-## Usage
+## 🔍 API Usage
+
 ### PDF to PNG Conversion
-- Upload a PDF file
-- Get the converted PNG file(s)
+- **Endpoint**: `/convert/pdf-to-png`
+- **Method**: POST
+- **Input**: PDF file
+- **Output**: ZIP file containing PNG images
 
 ### PNG to PDF Conversion
-- Upload a PNG file
-- Get the converted PDF file
+- **Endpoint**: `/convert/png-to-pdf`
+- **Method**: POST
+- **Input**: PNG file
+- **Output**: PDF file
 
 ### Background Removal
-- Upload an image (PNG, JPG, JPEG, WEBP)
-- Get the image with background removed
+- **Endpoint**: `/process/remove-background`
+- **Method**: POST
+- **Input**: Image file (PNG, JPG, JPEG, WEBP)
+- **Output**: Processed image with background removed
 
-### Combine PDFs
-- Select multiple PDF files (2 or more)
-- Get a single combined PDF file
+### PDF Combination
+- **Endpoint**: `/process/combine-pdf`
+- **Method**: POST
+- **Input**: Multiple PDF files
+- **Output**: Single combined PDF file
 
-## Dependencies
-- Flask
-- PyPDF2
-- pdf2image
-- Pillow
-- rembg
-- Werkzeug
+## ⚙️ Configuration
 
-## Note
-- Maximum file size: 16MB
-- Supported formats:
-  - PDF to PNG conversion: PDF files
-  - PNG to PDF conversion: PNG files
-  - Background removal: PNG, JPG, JPEG, WEBP
-  - PDF combination: PDF files
+- **Maximum file size**: 16MB
+- **Supported formats**:
+  - PDF files (`.pdf`)
+  - Image files (`.png`, `.jpg`, `.jpeg`, `.webp`)
+  - Other formats may be supported based on the conversion type
+
+## 🔒 Security Considerations
+
+- Input validation implemented
+- Temporary file cleanup
+- Rate limiting (coming soon)
+- File size restrictions
+
+## 🌟 Deployment
+
+The service is configured for deployment on Railway platform with the following files:
+- `Dockerfile` - Container configuration
+- `railway.toml` - Railway platform settings
+- `Procfile` - Process configuration
+
+## 📝 License
+
+MIT License
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request to the [repository](https://github.com/0537ch/randomdoctools).

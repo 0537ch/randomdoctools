@@ -1,196 +1,505 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-bs-theme="dark">
 <head>
-    <title>File Converter & Background Remover</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Processing Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
+        :root {
+            --bs-body-bg: #0f172a;
+            --bs-body-color: #e2e8f0;
+            --bs-primary: #3b82f6;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--bs-body-color);
+            min-height: 100vh;
+            padding: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
         }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
+
+        .page-title {
+            color: #60a5fa;
+            font-weight: 600;
             text-align: center;
-        }
-        .tool-section {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .tool-section h2 {
-            margin-top: 0;
-            color: #444;
-        }
-        form {
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        input[type="file"] {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+
+        .card {
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
+
+        .card-title {
+            color: #60a5fa;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-select {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .service-select:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+            outline: none;
+        }
+
+        .service-form {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-label {
+            font-size: 0.813rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-input-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px dashed rgba(96, 165, 250, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .file-input-container:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+        }
+
+        .file-input-container i {
+            font-size: 1.25rem;
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-input-container p {
+            font-size: 0.813rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
+            padding: 8px 16px;
+            width: 100%;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #45a049;
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
-        #error {
-            color: red;
-            margin-top: 10px;
+
+        .input-field {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            width: 100%;
         }
-        .loading {
+
+        .input-field:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+            outline: none;
+        }
+
+        .alert {
+            font-size: 0.813rem;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
             display: none;
-            text-align: center;
-            margin-top: 10px;
+        }
+
+        .alert-success {
+            background: rgba(6, 78, 59, 0.8);
+            border: 1px solid #059669;
+            color: #a7f3d0;
+        }
+
+        .alert-error {
+            background: rgba(127, 29, 29, 0.8);
+            border: 1px solid #dc2626;
+            color: #fecaca;
+        }
+
+        .alert-link {
+            color: inherit;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .alert-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: inherit;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>File Converter & Background Remover</h1>
-        
-        <div class="tool-section">
-            <h2>PDF ↔ PNG Converter</h2>
-            <form id="convertForm" action="/convert" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept=".pdf,.png" required>
-                <button type="submit">Convert</button>
-                <div class="loading" id="convertLoading">Converting...</div>
-            </form>
-        </div>
+        <h1 class="page-title">
+            <i class="bi bi-tools"></i>
+            File Converter Service
+        </h1>
 
-        <div class="tool-section">
-            <h2>Background Remover</h2>
-            <form id="bgRemoveForm" action="/remove-background" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp" required>
-                <button type="submit">Remove Background</button>
-                <div class="loading" id="bgLoading">Processing...</div>
-            </form>
-        </div>
+        <div class="card">
+            <div class="card-title">
+                <i class="bi bi-cog"></i>
+                Convert Your Files
+            </div>
 
-        <div class="tool-section">
-            <h2>Combine PDFs</h2>
-            <form id="combinePdfForm" enctype="multipart/form-data">
-                <input type="file" name="files" accept=".pdf" multiple required>
-                <button type="submit">Combine PDFs</button>
-            </form>
-        </div>
+            <form id="converterForm" onsubmit="handleSubmit(event)">
+                <select id="fileType" class="service-select" onchange="updateServices()">
+                    <option value="">Select File Type</option>
+                    <option value="pdf">PDF</option>
+                    <option value="image">Image</option>
+                </select>
 
-        <div id="error"></div>
+                <select id="serviceType" class="service-select" disabled>
+                    <option value="">Select Service</option>
+                </select>
+
+                <div id="dynamicForm" class="service-form" style="display: none;">
+                    <div class="file-input-container" onclick="document.getElementById('fileInput').click()">
+                        <i class="bi bi-cloud-upload"></i>
+                        <p>Click to upload or drag files here</p>
+                        <input type="file" id="fileInput" style="display: none;" required>
+                    </div>
+                    <div id="additionalFields"></div>
+                    <button type="submit" class="submit-btn mt-3">
+                        <i class="bi bi-sync-alt"></i>
+                        Convert File
+                    </button>
+                </div>
+            </form>
+
+            <div id="successAlert" class="alert alert-success" role="alert">
+                <i class="bi bi-check-circle"></i>
+                File processed successfully! 
+                <a href="#" id="downloadLink" class="alert-link ms-2" style="display: none;">
+                    <i class="bi bi-download"></i> Download File
+                </a>
+            </div>
+
+            <div id="errorAlert" class="alert alert-error" role="alert">
+                <i class="bi bi-exclamation-circle"></i>
+                <span id="errorMessage">An error occurred during processing.</span>
+            </div>
+        </div>
     </div>
 
     <script>
-        function handleForm(formId, loadingId) {
-            const form = document.getElementById(formId);
-            const loading = document.getElementById(loadingId);
-            const error = document.getElementById('error');
+        const services = {
+            pdf: [
+                { value: 'convert-to-png', label: 'Convert to PNG' },
+                { value: 'combine-pdfs', label: 'Combine PDFs' },
+                { value: 'split-pdf', label: 'Split PDF' },
+                { value: 'rotate-pdf', label: 'Rotate PDF' },
+                { value: 'add-watermark', label: 'Add Watermark' }
+            ],
+            image: [
+                { value: 'remove-background', label: 'Remove Background' },
+                { value: 'resize-image', label: 'Resize Image' },
+                { value: 'convert-format', label: 'Convert Format' },
+                { value: 'compress-image', label: 'Compress Image' }
+            ]
+        };
 
-            form.onsubmit = async (e) => {
-                e.preventDefault();
-                error.textContent = '';
-                loading.style.display = 'block';
+        const additionalFields = {
+            'rotate-pdf': [
+                { type: 'number', name: 'degrees', label: 'Rotation Degrees', min: 0, max: 360, required: true }
+            ],
+            'add-watermark': [
+                { type: 'text', name: 'watermarkText', label: 'Watermark Text', required: true },
+                { type: 'number', name: 'opacity', label: 'Opacity (%)', min: 1, max: 100, value: 50 }
+            ],
+            'resize-image': [
+                { type: 'number', name: 'width', label: 'Width (px)', min: 1 },
+                { type: 'number', name: 'height', label: 'Height (px)', min: 1 }
+            ],
+            'convert-format': [
+                { type: 'select', name: 'format', label: 'Target Format', options: [
+                    { value: 'png', label: 'PNG' },
+                    { value: 'jpg', label: 'JPG' },
+                    { value: 'webp', label: 'WebP' },
+                    { value: 'gif', label: 'GIF' }
+                ]}
+            ],
+            'compress-image': [
+                { type: 'range', name: 'quality', label: 'Quality', min: 1, max: 100, value: 80 }
+            ]
+        };
 
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: new FormData(form)
-                    });
-
-                    if (!response.ok) {
-                        const contentType = response.headers.get("content-type");
-                        if (contentType && contentType.includes("application/json")) {
-                            const data = await response.json();
-                            throw new Error(data.error || 'Processing failed');
-                        } else {
-                            throw new Error('Processing failed. Please try again.');
-                        }
-                    }
-
-                    const contentDisposition = response.headers.get('content-disposition');
-                    let filename = 'output.png';
-                    if (contentDisposition) {
-                        const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
-                        if (matches != null && matches[1]) {
-                            filename = matches[1].replace(/['"]/g, '');
-                        }
-                    }
-
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-
-                } catch (err) {
-                    error.textContent = err.message;
-                } finally {
-                    loading.style.display = 'none';
-                }
-            };
+        function updateServices() {
+            const fileType = document.getElementById('fileType').value;
+            const serviceSelect = document.getElementById('serviceType');
+            const dynamicForm = document.getElementById('dynamicForm');
+            
+            serviceSelect.innerHTML = '<option value="">Select Service</option>';
+            
+            if (fileType) {
+                services[fileType].forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.value;
+                    option.textContent = service.label;
+                    serviceSelect.appendChild(option);
+                });
+                serviceSelect.disabled = false;
+            } else {
+                serviceSelect.disabled = true;
+            }
+            
+            dynamicForm.style.display = 'none';
+            document.getElementById('additionalFields').innerHTML = '';
         }
 
-        handleForm('convertForm', 'convertLoading');
-        handleForm('bgRemoveForm', 'bgLoading');
-
-        // Handle PDF combination
-        document.getElementById('combinePdfForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const formData = new FormData();
-            const files = document.getElementById('combinePdfForm').elements['files'].files;
+        document.getElementById('serviceType').addEventListener('change', function() {
+            const serviceType = this.value;
+            const dynamicForm = document.getElementById('dynamicForm');
+            const additionalFieldsContainer = document.getElementById('additionalFields');
             
-            if (files.length < 2) {
-                alert('Please select at least 2 PDF files');
+            if (serviceType) {
+                dynamicForm.style.display = 'block';
+                additionalFieldsContainer.innerHTML = '';
+                
+                if (additionalFields[serviceType]) {
+                    additionalFields[serviceType].forEach(field => {
+                        const div = document.createElement('div');
+                        div.className = 'mb-3';
+                        
+                        const label = document.createElement('label');
+                        label.className = 'form-label';
+                        label.textContent = field.label;
+                        div.appendChild(label);
+                        
+                        let input;
+                        if (field.type === 'select') {
+                            input = document.createElement('select');
+                            field.options.forEach(option => {
+                                const opt = document.createElement('option');
+                                opt.value = option.value;
+                                opt.textContent = option.label;
+                                input.appendChild(opt);
+                            });
+                        } else {
+                            input = document.createElement('input');
+                            input.type = field.type;
+                            if (field.min !== undefined) input.min = field.min;
+                            if (field.max !== undefined) input.max = field.max;
+                            if (field.value !== undefined) input.value = field.value;
+                        }
+                        
+                        input.className = 'input-field';
+                        input.name = field.name;
+                        input.required = field.required || false;
+                        div.appendChild(input);
+                        
+                        additionalFieldsContainer.appendChild(div);
+                    });
+                }
+            } else {
+                dynamicForm.style.display = 'none';
+            }
+        });
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                document.getElementById('errorAlert').style.display = 'block';
+                document.getElementById('errorMessage').textContent = 'Please select a file first';
                 return;
             }
             
-            for (let file of files) {
-                formData.append('files', file);
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // Add any additional form fields to formData
+            const additionalFields = document.getElementById('additionalFields').getElementsByTagName('input');
+            for (let field of additionalFields) {
+                formData.append(field.name, field.value);
             }
             
-            try {
-                const response = await fetch('/combine-pdf', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'combined.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    a.remove();
-                } else {
-                    const data = await response.json();
-                    alert(data.error || 'Failed to combine PDFs');
+            const fileType = document.getElementById('fileType').value;
+            const serviceType = document.getElementById('serviceType').value;
+            const submitBtn = event.target.querySelector('.submit-btn');
+            
+            // Hide any existing alerts
+            document.getElementById('successAlert').style.display = 'none';
+            document.getElementById('errorAlert').style.display = 'none';
+            document.getElementById('downloadLink').style.display = 'none';
+            
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Processing...';
+            
+            // Get the correct endpoint based on service type
+            let endpoint = '';
+            switch(serviceType) {
+                case 'convert-to-png':
+                case 'convert-to-pdf':
+                    endpoint = '/convert';
+                    break;
+                case 'remove-background':
+                    endpoint = '/remove-background';
+                    break;
+                case 'resize-image':
+                    endpoint = '/resize-image';
+                    break;
+                case 'convert-format':
+                    endpoint = '/convert-image';
+                    break;
+                case 'compress-image':
+                    endpoint = '/compress-image';
+                    break;
+                case 'combine-pdfs':
+                    endpoint = '/combine-pdf';
+                    break;
+                case 'split-pdf':
+                    endpoint = '/split-pdf';
+                    break;
+                case 'rotate-pdf':
+                    endpoint = '/rotate-pdf';
+                    break;
+                case 'add-watermark':
+                    endpoint = '/add-watermark';
+                    break;
+            }
+            
+            // Send the request to the correct endpoint
+            fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.error || 'Processing failed');
+                    });
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while combining PDFs');
+                return response.blob();
+            })
+            .then(blob => {
+                // Create download link
+                const downloadLink = document.getElementById('downloadLink');
+                const url = window.URL.createObjectURL(blob);
+                downloadLink.href = url;
+                
+                // Set filename based on service type and original file
+                let filename = 'processed_' + file.name;
+                
+                if (serviceType === 'convert-to-png') {
+                    filename = filename.replace(/\.[^/.]+$/, '.png');
+                } else if (serviceType === 'convert-format') {
+                    const formatField = document.querySelector('select[name="format"]');
+                    if (formatField) {
+                        filename = filename.replace(/\.[^/.]+$/, '.' + formatField.value);
+                    }
+                }
+                
+                downloadLink.download = filename;
+                
+                // Show success message with download link
+                document.getElementById('successAlert').style.display = 'block';
+                downloadLink.style.display = 'inline-block';
+                
+                // Reset form
+                event.target.reset();
+                document.getElementById('serviceType').disabled = true;
+                document.getElementById('dynamicForm').style.display = 'none';
+                document.getElementById('additionalFields').innerHTML = '';
+                
+                // Reset file input display
+                document.querySelector('.file-input-container p').textContent = 'Click to upload or drag files here';
+            })
+            .catch(error => {
+                // Show error message
+                document.getElementById('errorAlert').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message || 'An error occurred during processing. Please try again.';
+            })
+            .finally(() => {
+                // Re-enable submit button and restore original text
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-sync-alt"></i> Convert File';
+            });
+        }
+
+        // File input styling
+        const fileInput = document.getElementById('fileInput');
+        fileInput.addEventListener('change', function() {
+            const container = this.parentElement;
+            if (this.files.length > 0) {
+                container.querySelector('p').textContent = `Selected: ${this.files[0].name}`;
+            } else {
+                container.querySelector('p').textContent = 'Click to upload or drag files here';
             }
         });
     </script>
